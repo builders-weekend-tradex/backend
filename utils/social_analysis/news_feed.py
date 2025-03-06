@@ -1,11 +1,18 @@
 # !pip install newsapi-python
 from newsapi import NewsApiClient
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+import os
 
-DEFAULT_SYMBOL = "Walt Disney"
 # source: https://newsapi.org/
 # Init
-newsapi = NewsApiClient(api_key='937ebcd1514b4ecb832e964af898ae33')
+
+load_dotenv()
+
+API_KEY = os.getenv("API_KEY")
+newsapi = NewsApiClient(api_key=API_KEY)
+
+DEFAULT_SYMBOL = "Walt Disney"
 
 def get_news(symbol: str = DEFAULT_SYMBOL):
   end_date = datetime.today()
