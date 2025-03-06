@@ -1,5 +1,5 @@
 from typing import Union
-from utils.news_feed import get_news
+from utils.social_analysis.news_feed import get_news, DEFAULT_SYMBOL
 
 from fastapi import FastAPI
 
@@ -11,7 +11,7 @@ def read_root():
     return {"Hello": "World"}
 
 @app.get("/news/")
-def fetch_news(symbol: str = "Walt Disney"):
+def fetch_news(symbol: str = DEFAULT_SYMBOL):
     news = get_news(symbol)
     return {"symbol": symbol, "articles": news}
 
