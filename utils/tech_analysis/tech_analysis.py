@@ -1,9 +1,4 @@
-# !pip install yfinance
-# !pip install pandas_ta
-# !pip install openai
-# !pip install chart-studio
-# !pip install python-docx
-
+import os
 import matplotlib.pyplot as plt
 import pandas as pd
 import yfinance as yf
@@ -18,7 +13,8 @@ import plotly.graph_objs as go
 import plotly.tools as tls
 
 from docx import Document
-import os
+
+TICKER_SYMBOL = 'DIS'
 
 # Define the folder where the files will be stored
 output_folder = "utils/tech_analysis/outputs"
@@ -286,16 +282,15 @@ def tech_analysis(symbol):
         plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'CMF.html'), auto_open=False)
 
 
-        # Show the plots
+        # Show the plots (show is disabled at the moment)
         plt.tight_layout()
         # plt.show()
 
         return generated_text
 
-symbol = 'DIS'
-generated_text = tech_analysis(symbol)
+generated_text = tech_analysis(TICKER_SYMBOL)
 
 document = Document()
-document.add_heading('DIS', level=1)
+document.add_heading(TICKER_SYMBOL, level=1)
 document.add_paragraph(generated_text)
 document.save(os.path.join(output_folder, 'Summary.docx'))
