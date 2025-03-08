@@ -6,7 +6,7 @@ from utils.social_analysis.news_feed import get_news, COMPANY_NAME
 from utils.tech_analysis.tech_analysis import tech_analysis, TICKER_SYMBOL
 from utils.fundamental_analysis.lexi import lexi_chat 
 
-DISABLE_NEWS_FETCH = os.getenv("DISABLE_NEWS_FETCH", "false").lower() == "true"
+DISABLE_NEWS_FETCH=True
 
 app = FastAPI()
 
