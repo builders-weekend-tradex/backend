@@ -19,10 +19,6 @@ TICKER_SYMBOL = 'DIS'
 # Define the folder where the files will be stored
 output_folder = "utils/tech_analysis/outputs"
 
-# Create the folder if it doesn't exist
-if not os.path.exists(output_folder):
-    os.makedirs(output_folder)
-
 def tech_analysis(symbol):
         # Define the stock timeframe
         end_date = datetime.today()
@@ -55,9 +51,9 @@ def tech_analysis(symbol):
         stock_data.ta.cmf(append=True)
         stock_data.ta.psar(append=True)
 
-        #convert OBV to million
-        stock_data['OBV_in_million'] =  stock_data['OBV']/1e7
-        stock_data['MACD_histogram_12_26_9'] =  stock_data['MACDh_12_26_9'] # not to confuse chatGTP
+        # Convert OBV to million
+        stock_data['OBV_in_million'] = stock_data['OBV']/1e7
+        stock_data['MACD_histogram_12_26_9'] = stock_data['MACDh_12_26_9']
 
         # Summarize technical indicators for the last day
         last_day_summary = stock_data.iloc[-1][['Date', 'Close', 'High', 'Low', 'Open', 'Volume', 'MACD_12_26_9',
@@ -68,62 +64,6 @@ def tech_analysis(symbol):
               'PSARaf_0.02_0.2', 'PSARr_0.02_0.2', 'OBV_in_million',
               'MACD_histogram_12_26_9']]
 
-        # print("Summary of Technical Indicators for the Last Day:")
-        # print(last_day_summary)
-
-        ## Work on the prompt
-        sys_prompt = """
-        Assume the role as a leading Technical Analysis (TA) expert in the stock market, \
-        a modern counterpart to Charles Dow, John Bollinger, and Alan Andrews. \
-        Your mastery encompasses both stock fundamentals and intricate technical indicators. \
-        You possess the ability to decode complex market dynamics, \
-        providing clear insights and recommendations backed by a thorough understanding of interrelated factors. \
-        Your expertise extends to practical tools like the pandas_ta module, \
-        allowing you to navigate data intricacies with ease. \
-        As a TA authority, your role is to decipher market trends, make informed predictions, and offer valuable perspectives.
-
-        given {} TA data as below on the last trading day, what will be the next few days possible stock price movement?
-
-        Summary of Technical Indicators for the Last Day:
-        {}""".format(symbol,last_day_summary)
-
-        # print(sys_prompt)
-
-        # To create offline GPT Snippet, ##TBD ##VENALI ##POST DEMO
-        # from transformers import DistilBertTokenizer, DistilBertModel, GPT2LMHeadModel, GPT2Tokenizer, DeiTFeatureExtractor, DeiTForImageClassification
-
-        # import torch
-        # from transformers import DistilBertTokenizer, DistilBertModel, GPT2LMHeadModel, GPT2Tokenizer, CLIPProcessor, CLIPModel
-
-        # # Text Generation with DistilBERT as Encoder and GPT-2 as Decoder
-        # def generate_text(prompt):
-        #     # Initialize tokenizer and models
-        #     bert_tokenizer = DistilBertTokenizer.from_pretrained("distilbert-base-uncased")
-        #     bert_model = DistilBertModel.from_pretrained("distilbert-base-uncased")
-        #     gpt2_tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-        #     gpt2_model = GPT2LMHeadModel.from_pretrained("gpt2")
-
-        #     # Tokenize the prompt with DistilBERT
-        #     inputs = bert_tokenizer(prompt, return_tensors="pt", max_length=1024, truncation=True) # Adjust the parameter as needed
-
-        #     # Get the hidden states from DistilBERT
-        #     with torch.no_grad():
-        #         outputs = bert_model(**inputs)
-
-        #     # Use the last hidden state as input to GPT-2
-        #     input_ids = inputs["input_ids"]
-        #     gpt2_inputs = gpt2_tokenizer.encode(prompt, return_tensors="pt", max_length=1024, truncation=True) # Adjust the parameter as needed
-        #     gpt2_outputs = gpt2_model.generate(input_ids=gpt2_inputs, max_length=1024, num_beams=5, no_repeat_ngram_size=2, early_stopping=True) # Adjust the parameter as needed
-
-        #     # Decode the output from GPT-2
-        #     generated_text = gpt2_tokenizer.decode(gpt2_outputs[0], skip_special_tokens=True)
-
-        #     return generated_text
-
-        # # Let users enter the prompt
-        # prompt = input("Enter your prompt: ")
-        # generated_text = generate_text(prompt)
-        # print("Generated Text:", generated_text)
         generated_text = """Based on the technical snapshot from February 28, 2025, here’s a detailed view of the likely near-term dynamics for DIS:
 
         Bullish Underpinnings with Cautionary Overbought Signals
@@ -168,13 +108,10 @@ def tech_analysis(symbol):
 
         """
 
-        print(generated_text)
-
-
         ##############################################################################################################################
         # Plot the technical indicators
 
-        # NOTE - If you want to see the charts etc. directly when they are created, please remove "auto_open=false".
+        # !! NOTE - If you want to see the charts etc. directly when they are created, please remove "auto_open=false".
 
         # Price Trend Chart
         price_rend_chart = plt.figure()
@@ -182,8 +119,8 @@ def tech_analysis(symbol):
         plt.plot(stock_data.index, stock_data['EMA_50'], label='EMA 50', color='green')
         plt.plot(stock_data.index, stock_data['SMA_20'], label='SMA_20', color='orange')
         plt.title("Price Trend")
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))  # Format date as "Jun14"
-        plt.xticks(rotation=45, fontsize=8)  # Adjust font size
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))
+        plt.xticks(rotation=45, fontsize=8)
         plotly_fig = tls.mpl_to_plotly(price_rend_chart, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
         plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'Price Trend Chart.html'), auto_open=False)
@@ -193,8 +130,8 @@ def tech_analysis(symbol):
         onbalance_volume_chart = plt.figure()
         plt.plot(stock_data['OBV'], label='On-Balance Volume')
         plt.title('On-Balance Volume (OBV) Indicator')
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))  # Format date as "Jun14"
-        plt.xticks(rotation=45, fontsize=8)  # Adjust font size
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))
+        plt.xticks(rotation=45, fontsize=8)
         plt.legend()
         plotly_fig = tls.mpl_to_plotly(onbalance_volume_chart, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
@@ -205,8 +142,8 @@ def tech_analysis(symbol):
         plt.plot(stock_data['MACD_12_26_9'], label='MACD')
         plt.plot(stock_data['MACDh_12_26_9'], label='MACD Histogram')
         plt.title('MACD Indicator')
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))  # Format date as "Jun14"
-        plt.xticks(rotation=45, fontsize=8)  # Adjust font size
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))
+        plt.xticks(rotation=45, fontsize=8)
         plt.title("MACD")
         plt.legend()
         plotly_fig = tls.mpl_to_plotly(macd_plot, resize=True, strip_style=True, verbose=True)
@@ -219,8 +156,8 @@ def tech_analysis(symbol):
         plt.axhline(y=70, color='r', linestyle='--', label='Overbought (70)')
         plt.axhline(y=30, color='g', linestyle='--', label='Oversold (30)')
         plt.legend()
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))  # Format date as "Jun14"
-        plt.xticks(rotation=45, fontsize=8)  # Adjust font size
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))
+        plt.xticks(rotation=45, fontsize=8)
         plotly_fig = tls.mpl_to_plotly(rsi_plot, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
         plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'RSI Plot.html'), auto_open=False)
@@ -232,8 +169,8 @@ def tech_analysis(symbol):
         plt.plot(stock_data.index, stock_data['BBL_5_2.0'], label='Lower BB')
         plt.plot(stock_data.index, stock_data['Close'], label='Close', color='brown')
         plt.title("Bollinger Bands")
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))  # Format date as "Jun14"
-        plt.xticks(rotation=45, fontsize=8)  # Adjust font size
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))
+        plt.xticks(rotation=45, fontsize=8)
         plt.legend()
         plotly_fig = tls.mpl_to_plotly(bollinger_bands_plot, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
@@ -244,8 +181,8 @@ def tech_analysis(symbol):
         plt.plot(stock_data.index, stock_data['STOCHk_14_3_3'], label='Stoch %K')
         plt.plot(stock_data.index, stock_data['STOCHd_14_3_3'], label='Stoch %D')
         plt.title("Stochastic Oscillator")
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))  # Format date as "Jun14"
-        plt.xticks(rotation=45, fontsize=8)  # Adjust font size
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))
+        plt.xticks(rotation=45, fontsize=8)
         plt.legend()
         plotly_fig = tls.mpl_to_plotly(stochastic_oscillator_plot, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
@@ -255,8 +192,8 @@ def tech_analysis(symbol):
         williams_r_plot = plt.figure()
         plt.plot(stock_data.index, stock_data['WILLR_14'])
         plt.title("Williams %R")
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))  # Format date as "Jun14"
-        plt.xticks(rotation=45, fontsize=8)  # Adjust font size
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))
+        plt.xticks(rotation=45, fontsize=8)
         plotly_fig = tls.mpl_to_plotly(williams_r_plot, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
         plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'Williams R Plot.html'), auto_open=False)
@@ -265,8 +202,8 @@ def tech_analysis(symbol):
         adx_plot = plt.figure()
         plt.plot(stock_data.index, stock_data['ADX_14'])
         plt.title("Average Directional Index (ADX)")
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))  # Format date as "Jun14"
-        plt.xticks(rotation=45, fontsize=8)  # Adjust font size
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))
+        plt.xticks(rotation=45, fontsize=8)
         plotly_fig = tls.mpl_to_plotly(adx_plot, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
         plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'ADX Plot.html'), auto_open=False)
@@ -275,16 +212,16 @@ def tech_analysis(symbol):
         cmf_plot = plt.figure()
         plt.plot(stock_data.index, stock_data['CMF_20'])
         plt.title("Chaikin Money Flow (CMF)")
-        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))  # Format date as "Jun14"
-        plt.xticks(rotation=45, fontsize=8)  # Adjust font size
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b%d'))
+        plt.xticks(rotation=45, fontsize=8)
         plotly_fig = tls.mpl_to_plotly(cmf_plot, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
         plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'CMF.html'), auto_open=False)
 
 
-        # Show the plots (show is disabled at the moment)
+        # Show the plots (if necessary, plt.show() can be disabled)
         plt.tight_layout()
-        # plt.show()
+        plt.show()
 
         return generated_text
 

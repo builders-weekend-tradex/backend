@@ -5,8 +5,6 @@ from dotenv import load_dotenv
 
 # source: https://newsapi.org/
 
-# Init
-
 load_dotenv()
 
 API_KEY = os.getenv("API_KEY")

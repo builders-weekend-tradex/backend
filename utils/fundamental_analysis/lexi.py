@@ -12,13 +12,6 @@ client = OpenAI(
     api_key=LEXI_API_KEY
 )
 
-# response = client.chat.completions.create(
-#     model="Lexi", # Available models: Lexi, LexiOnboarding
-#     messages=[
-#         {"role": "user", "content": "Hello!"}
-#     ]
-# )
-
 def lexi_chat(message: str):
     try:
         response = client.chat.completions.create(
