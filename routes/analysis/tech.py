@@ -7,7 +7,7 @@ router = APIRouter()
 @router.get("/analysis/tech/summary/")
 def get_technical_analysis(symbol: str = TICKER_SYMBOL):
     try:
-        analysis_result = tech_analysis(symbol)
+        analysis_result = tech_analysis(symbol)[1]
         return {"symbol": symbol, "analysis": analysis_result}
     except Exception as e:
         return {"error": str(e)}

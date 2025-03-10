@@ -218,4 +218,4 @@ def tech_analysis(symbol):
         plt.tight_layout()
         # plt.show()
 
-        return html_charts
+        return html_charts, generated_text
