@@ -1,15 +1,10 @@
-from typing import Union
-
 from fastapi import FastAPI
+from routes.analysis.social import router as social_router
+from routes.analysis.tech import router as tech_router
+from routes.analysis.lexi import router as lexi_router
 
 app = FastAPI()
 
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+app.include_router(social_router)
+app.include_router(tech_router)
+app.include_router(lexi_router)
