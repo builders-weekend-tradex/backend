@@ -1,4 +1,5 @@
 import os
+import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
 import yfinance as yf
@@ -8,6 +9,8 @@ from datetime import datetime, timedelta
 
 import plotly.tools as tls
 import plotly.io as pio
+
+matplotlib.use("Agg")
 
 TICKER_SYMBOL = 'DIS'
 
