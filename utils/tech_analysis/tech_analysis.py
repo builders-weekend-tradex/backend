@@ -6,13 +6,8 @@ import pandas_ta as ta
 import matplotlib.dates as mdates
 from datetime import datetime, timedelta
 
-from chart_studio import plotly
-import plotly
-import plotly.offline as pyoff
-import plotly.graph_objs as go
 import plotly.tools as tls
-
-from docx import Document
+import plotly.io as pio
 
 TICKER_SYMBOL = 'DIS'
 
@@ -111,7 +106,7 @@ def tech_analysis(symbol):
         ##############################################################################################################################
         # Plot the technical indicators
 
-        # !! NOTE - If you want to see the charts etc. directly when they are created, please remove "auto_open=false".
+        html_charts = {}
 
         # Price Trend Chart
         price_rend_chart = plt.figure()
@@ -123,7 +118,7 @@ def tech_analysis(symbol):
         plt.xticks(rotation=45, fontsize=8)
         plotly_fig = tls.mpl_to_plotly(price_rend_chart, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
-        plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'Price Trend Chart.html'), auto_open=False)
+        html_charts["price_trend"] = pio.to_html(plotly_fig, full_html=False)
 
 
         # On-Balance Volume Chart
@@ -135,7 +130,7 @@ def tech_analysis(symbol):
         plt.legend()
         plotly_fig = tls.mpl_to_plotly(onbalance_volume_chart, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
-        plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'On-Balance Volume Chart.html'), auto_open=False)
+        html_charts["on_balance_volume_chart"] = pio.to_html(plotly_fig, full_html=False)
 
         # MACD Plot
         macd_plot = plt.figure()
@@ -148,7 +143,7 @@ def tech_analysis(symbol):
         plt.legend()
         plotly_fig = tls.mpl_to_plotly(macd_plot, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
-        plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'MACD.html'), auto_open=False)
+        html_charts["macd"] = pio.to_html(plotly_fig, full_html=False)
 
         # RSI Plot
         rsi_plot = plt.figure()
@@ -160,7 +155,7 @@ def tech_analysis(symbol):
         plt.xticks(rotation=45, fontsize=8)
         plotly_fig = tls.mpl_to_plotly(rsi_plot, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
-        plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'RSI Plot.html'), auto_open=False)
+        html_charts["rsi"] = pio.to_html(plotly_fig, full_html=False)
 
         # Bollinger Bands Plot
         bollinger_bands_plot = plt.figure()
@@ -174,7 +169,7 @@ def tech_analysis(symbol):
         plt.legend()
         plotly_fig = tls.mpl_to_plotly(bollinger_bands_plot, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
-        plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'Bollinger Bands Plot.html'), auto_open=False)
+        html_charts["bollinger_bands_plot"] = pio.to_html(plotly_fig, full_html=False)
 
         # Stochastic Oscillator Plot
         stochastic_oscillator_plot = plt.figure()
@@ -186,7 +181,7 @@ def tech_analysis(symbol):
         plt.legend()
         plotly_fig = tls.mpl_to_plotly(stochastic_oscillator_plot, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
-        plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'Stochastic Oscillator Plot.html'), auto_open=False)
+        html_charts["stochastic_oscillator_plot"] = pio.to_html(plotly_fig, full_html=False)
 
         # Williams %R Plot
         williams_r_plot = plt.figure()
@@ -196,7 +191,7 @@ def tech_analysis(symbol):
         plt.xticks(rotation=45, fontsize=8)
         plotly_fig = tls.mpl_to_plotly(williams_r_plot, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
-        plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'Williams R Plot.html'), auto_open=False)
+        html_charts["williams_r_plot"] = pio.to_html(plotly_fig, full_html=False)
 
         # ADX Plot
         adx_plot = plt.figure()
@@ -206,7 +201,7 @@ def tech_analysis(symbol):
         plt.xticks(rotation=45, fontsize=8)
         plotly_fig = tls.mpl_to_plotly(adx_plot, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
-        plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'ADX Plot.html'), auto_open=False)
+        html_charts["adx_plot"] = pio.to_html(plotly_fig, full_html=False)
 
         # CMF Plot
         cmf_plot = plt.figure()
@@ -216,18 +211,11 @@ def tech_analysis(symbol):
         plt.xticks(rotation=45, fontsize=8)
         plotly_fig = tls.mpl_to_plotly(cmf_plot, resize=True, strip_style=True, verbose=True)
         plotly_fig.update_layout(showlegend=True)
-        plotly.offline.plot(plotly_fig, filename=os.path.join(output_folder, 'CMF.html'), auto_open=False)
+        html_charts["cmf"] = pio.to_html(plotly_fig, full_html=False)
 
 
         # Show the plots (if necessary, plt.show() can be disabled)
         plt.tight_layout()
-        plt.show()
+        # plt.show()
 
-        return generated_text
-
-generated_text = tech_analysis(TICKER_SYMBOL)
-
-document = Document()
-document.add_heading(TICKER_SYMBOL, level=1)
-document.add_paragraph(generated_text)
-document.save(os.path.join(output_folder, 'Summary.docx'))
+        return html_charts
