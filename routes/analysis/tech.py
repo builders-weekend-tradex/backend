@@ -15,7 +15,7 @@ def get_technical_analysis(symbol: str = TICKER_SYMBOL):
 @router.get("/analysis/tech/charts/all/")
 def get_all_charts(symbol: str = TICKER_SYMBOL):
     try:
-        html_charts = tech_analysis(symbol)
+        html_charts = tech_analysis(symbol)[0]
         combined_html = "<br>".join(html_charts.values())
         return HTMLResponse(content=combined_html)
     except Exception as e:
