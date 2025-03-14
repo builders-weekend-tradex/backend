@@ -10,6 +10,13 @@ from datetime import datetime, timedelta
 import plotly.tools as tls
 import plotly.io as pio
 
+from backtesting import Backtest, Strategy
+from backtesting.lib import crossover
+from backtesting.test import SMA
+
+from bokeh.embed import file_html
+from bokeh.resources import CDN
+
 matplotlib.use("Agg")
 
 TICKER_SYMBOL = 'DIS'
@@ -52,6 +59,18 @@ def tech_analysis(symbol):
         # Convert OBV to million
         stock_data['OBV_in_million'] = stock_data['OBV']/1e7
         stock_data['MACD_histogram_12_26_9'] = stock_data['MACDh_12_26_9']
+
+        class SmaCross(Strategy):
+          def init(self):
+            price = self.data.Close
+            self.ma1 = self.I(SMA, price, 10)
+            self.ma2 = self.I(SMA, price, 20)
+
+          def next(self):
+            if crossover(self.ma1, self.ma2):
+                  self.buy()
+            elif crossover(self.ma2, self.ma1):
+                  self.sell()
 
         # Summarize technical indicators for the last day
         last_day_summary = stock_data.iloc[-1][['Date', 'Close', 'High', 'Low', 'Open', 'Volume', 'MACD_12_26_9',
@@ -216,6 +235,11 @@ def tech_analysis(symbol):
         plotly_fig.update_layout(showlegend=True)
         html_charts["cmf"] = pio.to_html(plotly_fig, full_html=False)
 
+        bt = Backtest(stock_data.set_index('Date'), SmaCross, commission=.002,
+              exclusive_orders=True)
+        bt.run()
+        fig = bt.plot(resample=False)
+        html_charts["backtesting"] = file_html(fig, CDN)
 
         # Show the plots (if necessary, plt.show() can be disabled)
         plt.tight_layout()
