@@ -238,7 +238,7 @@ def tech_analysis(symbol):
         bt = Backtest(stock_data.set_index('Date'), SmaCross, commission=.002,
               exclusive_orders=True)
         bt.run()
-        fig = bt.plot(resample=False)
+        fig = bt.plot(resample=False, open_browser=False)
         html_charts["backtesting"] = file_html(fig, CDN)
 
         # Show the plots (if necessary, plt.show() can be disabled)
