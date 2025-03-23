@@ -1,4 +1,5 @@
 import os
+import types
 import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -238,8 +239,11 @@ def tech_analysis(symbol):
         bt = Backtest(stock_data.set_index('Date'), SmaCross, commission=.002,
               exclusive_orders=True)
         bt.run()
-        fig = bt.plot(resample=False, open_browser=False)
+        fig = bt.plot(open_browser=False, resample=False)
         html_charts["backtesting"] = file_html(fig, CDN)
+        html_file = "SmaCross.html"
+        if os.path.exists(html_file):
+            os.remove(html_file)
 
         # Show the plots (if necessary, plt.show() can be disabled)
         plt.tight_layout()
