@@ -9,8 +9,8 @@ Ensure you have the following installed:
 ## Installation
 ### 1. Clone the repository
 ```
-git clone <repository_url>
-cd <repository_folder>
+git clone https://github.com/builders-weekend-tradex/backend.git
+cd backend
 ```
 ### 2. Set Up Environment Variables
 This project requires an `.env` file to store API keys. Create a `.env` file in the root directory and add the following:
