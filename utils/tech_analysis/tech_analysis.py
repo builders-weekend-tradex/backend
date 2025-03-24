@@ -6,7 +6,7 @@ import yfinance as yf
 import pandas_ta as ta
 import matplotlib.dates as mdates
 from datetime import datetime, timedelta
-from ..lexi import lexi_chat
+from utils.lexi import lexi_chat
 
 import plotly.tools as tls
 import plotly.io as pio
@@ -73,17 +73,8 @@ def tech_analysis(symbol):
             elif crossover(self.ma2, self.ma1):
                   self.sell()
 
-        # Summarize technical indicators for the last day
-        last_day_summary = stock_data.iloc[-1][['Date', 'Close', 'High', 'Low', 'Open', 'Volume', 'MACD_12_26_9',
-              'MACDh_12_26_9', 'MACDs_12_26_9', 'RSI_14', 'BBL_5_2.0', 'BBM_5_2.0',
-              'BBU_5_2.0', 'BBB_5_2.0', 'BBP_5_2.0', 'OBV', 'SMA_20', 'EMA_50',
-              'STOCHk_14_3_3', 'STOCHd_14_3_3', 'ADX_14', 'DMP_14', 'DMN_14',
-              'WILLR_14', 'CMF_20', 'PSARl_0.02_0.2', 'PSARs_0.02_0.2',
-              'PSARaf_0.02_0.2', 'PSARr_0.02_0.2', 'OBV_in_million',
-              'MACD_histogram_12_26_9']]
-
         # Generate summarized financial analysis with the help of Lexi
-        generated_text = lexi_chat(f"summarize this file /data/home/{TICKER_SYMBOL}.pdf")
+        generated_text = """In Progress"""
 
         ##############################################################################################################################
         # Plot the technical indicators
