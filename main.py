@@ -7,8 +7,8 @@ from routes.analysis.lexi import router as lexi_router
 app = FastAPI()
 
 origins = [
-    "https://www.trade-x.me",
-    "https://trade-x.me",
+    "https://www.trade-x.me/",
+    "https://trade-x.me/",
     "http://localhost:5173",
 ]
 
