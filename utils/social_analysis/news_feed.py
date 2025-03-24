@@ -31,5 +31,3 @@ def get_news(symbol: str = COMPANY_NAME):
     ]
 
   return articles
-
-get_news(COMPANY_NAME)
