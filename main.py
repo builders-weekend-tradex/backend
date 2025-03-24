@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from routes.analysis.social import router as social_router
 from routes.analysis.tech import router as tech_router
 from routes.analysis.lexi import router as lexi_router
