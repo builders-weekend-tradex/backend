@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from utils.fundamental_analysis.lexi import lexi_chat
+from utils.lexi import lexi_chat
 
 router = APIRouter()
 
