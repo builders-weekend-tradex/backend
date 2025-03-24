@@ -19,7 +19,7 @@ app.add_middleware(
     allow_origins=origins,  # Allow all origins; can be set to specific domains
     allow_credentials=True,  # Allow cookies and authentication headers
     allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH"],  # Allowed HTTP methods
-    allow_headers=["*"],  # Allow all headers; can be restricted to specific headers
+    allow_headers=["X-Requested-With", "Content-Type"],
 )
 
 app.include_router(social_router)
