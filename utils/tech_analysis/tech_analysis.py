@@ -1,5 +1,4 @@
 import os
-import types
 import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -7,6 +6,7 @@ import yfinance as yf
 import pandas_ta as ta
 import matplotlib.dates as mdates
 from datetime import datetime, timedelta
+from ..lexi import lexi_chat
 
 import plotly.tools as tls
 import plotly.io as pio
@@ -20,7 +20,7 @@ from bokeh.resources import CDN
 
 matplotlib.use("Agg")
 
-TICKER_SYMBOL = 'DIS'
+TICKER_SYMBOL = 'GOOG'
 
 # Define the folder where the files will be stored
 output_folder = "utils/tech_analysis/outputs"
@@ -82,49 +82,8 @@ def tech_analysis(symbol):
               'PSARaf_0.02_0.2', 'PSARr_0.02_0.2', 'OBV_in_million',
               'MACD_histogram_12_26_9']]
 
-        generated_text = """Based on the technical snapshot from February 28, 2025, here’s a detailed view of the likely near-term dynamics for DIS:
-
-        Bullish Underpinnings with Cautionary Overbought Signals
-        Price and Moving Averages:
-        The close at 113.80 is well above both the 20‐day SMA (111.01) and the 50‐day EMA (110.84), reinforcing an overall bullish sentiment. This alignment suggests that, in the short term, buyers have the upper hand.
-
-        MACD & Momentum:
-        The MACD line is positive (0.257) with a small but positive histogram (0.272). This indicates that momentum is still in play, although the magnitude isn’t extreme. The MACD supports continued upward movement—if buyers maintain their interest, the trend could persist.
-
-        Oscillator Cues:
-
-        The RSI is around 59.38, a neutral-to-slightly-bullish reading, implying there’s room to run before reaching classic overbought levels.
-
-        However, the stochastic oscillator (with %K near 78.85 and %D around 59.43) is climbing toward levels typically associated with overbought conditions.
-
-        More strikingly, the Williams %R sits at an extreme of –3.02 (with 0 being the extreme overbought territory), which is a clear warning sign that the stock might be due for a short-term pullback or at least a pause as profit-taking sets in.
-
-        Bollinger Bands:
-        The price is flirting with the upper Bollinger Band (113.96), suggesting that the stock is at the higher edge of its recent volatility range. In such scenarios, while an upward push is possible, a reversion toward the mid-band (around 111.73) is also common if the current momentum falters.
-
-        Trend Strength & Volume Indicators:
-        The ADX at about 17.52 indicates that while the trend is present, it isn’t particularly strong—meaning the upward move could be vulnerable to a brief consolidation or reversal if sentiment shifts. The positive directional movement (DMP > DMN) and a bullish PSAR reading (107.91, well below the current price) continue to support the upward bias, yet the overbought signals inject a level of caution.
-
-        Potential Scenarios for the Next Few Days
-        Continued Modest Rally:
-        If buying pressure persists and market participants shrug off the overbought warnings, DIS could continue its upward drift, potentially testing resistance levels around 115 or slightly higher. This would be supported by the MACD and the overall price trend above key moving averages.
-
-        Short-Term Correction/Consolidation:
-        The overbought readings (especially the Williams %R and near-maximum stochastic levels) suggest that a corrective pullback is possible. In this scenario, profit-taking might drive the price back toward the mid-Bollinger Band (around 111–112) before a fresh bout of buying resumes.
-
-        Sideways Trading:
-        Given the moderate ADX and the mix of bullish and overbought signals, another likely outcome is a period of consolidation. The market could settle into a range where prices oscillate between the support near 111 and resistance near 115 until a clearer directional catalyst emerges.
-
-        In Summary
-        While the overall setup is bullish—with price above key moving averages and positive momentum indicators—the extreme readings on oscillators and the proximity to the upper Bollinger Band inject a note of caution. Traders should be alert to:
-
-        A break below the SMA/EMA support levels (around 111–112), which could signal the onset of a short-term reversal.
-        Signs of weakening momentum on the MACD and a potential divergence in the stochastic, which would further confirm a consolidation phase or a mild pullback.
-        Thus, in the coming days, DIS may either continue its moderate rally—if momentum holds—or enter a brief period of consolidation or correction as market participants take profits. Monitoring volume and any shifts in momentum indicators will be key to adjusting positions accordingly.
-
-        This balanced view should serve as a guide for both trend-following and contrarian strategies in the near term.
-
-        """
+        # Generate summarized financial analysis with the help of Lexi
+        generated_text = lexi_chat(f"summarize this file /data/home/{TICKER_SYMBOL}.pdf")
 
         ##############################################################################################################################
         # Plot the technical indicators
