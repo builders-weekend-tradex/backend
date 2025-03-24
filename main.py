@@ -1,12 +1,12 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
 from routes.analysis.social import router as social_router
 from routes.analysis.tech import router as tech_router
 from routes.analysis.lexi import router as lexi_router
 
 app = FastAPI()
 
-origins = [
+allowed_origins = [
     "https://www.trade-x.me",
     "https://www.trade-x.me/",
     "https://trade-x.me",
@@ -16,10 +16,10 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Allow all origins; can be set to specific domains
-    allow_credentials=True,  # Allow cookies and authentication headers
-    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH"],  # Allowed HTTP methods
-    allow_headers=["X-Requested-With", "Content-Type"],
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["*"],
 )
 
 app.include_router(social_router)
