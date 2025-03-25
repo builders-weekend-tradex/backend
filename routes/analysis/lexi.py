@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from pydantic import BaseModel
 from utils.lexi import lexi_chat
 
@@ -8,6 +8,6 @@ class ChatRequest(BaseModel):
     message: str
 
 @router.post("/analysis/lexi/")
-def chat_with_lexi(request: ChatRequest):
-    response = lexi_chat(request.message)
+async def chat_with_lexi(request: Request, chat_request: ChatRequest):
+    response = lexi_chat(chat_request.message)
     return {"response": response}
