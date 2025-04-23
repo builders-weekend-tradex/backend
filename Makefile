@@ -10,23 +10,28 @@ PY=python3
 VENV=venv
 BIN= source $(VENV)/bin/activate
 
-# Make it work on windows
+# Make it work on Windows
 ifeq ($(OS), Windows_NT)
-	BIN= source $(VENV)/Scripts/activate
+	# For Windows, activate the virtual environment differently
+	BIN= $(VENV)\\Scripts\\activate
 	PY=py
 endif
 
 # Create virtual environment
 venv:
-	 $(PY) -m venv $(VENV)
+	$(PY) -m venv $(VENV)
 
 # Install dependencies from requirements.txt
 install: venv
-	pip install -r requirements.txt
+	$(BIN) && pip install -r requirements.txt
 
 # Run the FastAPI server
 runserver:
-	fastapi dev main.py
+	$(BIN) && fastapi dev main.py
+
+# Run tests using pytest
+test: venv
+	$(BIN) && pytest
 
 # Clean up virtual environment and any other generated files
 clean:
@@ -46,3 +51,5 @@ help:
 	@echo "  install     to install dependencies"
 	@echo "  run         to run the FastAPI server"
 	@echo "  clean       to clean up the virtual environment"
+	@echo "  freeze      to update requirements.txt"
+	@echo "  test        to run all tests using pytest"
