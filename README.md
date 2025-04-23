@@ -57,3 +57,18 @@ To remove the virtual environment and any generated files:
 ```
 make clean
 ```
+
+## Running Tests
+This project uses [pytest](https://docs.pytest.org/en/stable/) for testing.
+
+### Run All Tests
+To execute all tests:
+```
+make test
+```
+
+### Run a Specific Test File
+```
+pytest tests/analysis/{testfile}.py
+```
+
