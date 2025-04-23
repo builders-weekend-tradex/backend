@@ -42,7 +42,10 @@ def mock_yfinance_dataframe():
         ("Open", ""), ("High", ""), ("Low", ""), ("Close", ""), ("Volume", "")
     ])
     data = [[100, 105, 98, 102, 1000000]] * 120
-    index = pd.date_range(end=datetime.today(), periods=120)
+
+    today = pd.Timestamp.now().normalize()
+    index = pd.date_range(end=today, periods=120, freq='D')
+
     df = pd.DataFrame(data, columns=columns, index=index)
     df.index.name = "Date"
     return df
